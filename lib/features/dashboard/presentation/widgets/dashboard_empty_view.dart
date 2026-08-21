@@ -82,7 +82,7 @@ class _DashboardEmptyViewState extends State<DashboardEmptyView> {
                 icon: 'assets/icons/upload.png',
                 isLoading: false,
                 onPressed: () {
-                  Navigator.pushNamed(context, '/dashboard');
+                  Navigator.pushNamed(context, '/upload');
                 },
               ),
               SizedBox(height: screenHeight * 0.03),

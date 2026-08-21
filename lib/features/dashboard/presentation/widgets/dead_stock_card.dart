@@ -41,6 +41,7 @@ class DeadStockCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade400),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),

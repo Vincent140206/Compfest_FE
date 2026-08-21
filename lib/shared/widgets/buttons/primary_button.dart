@@ -5,11 +5,13 @@ import '../../../core/theme/app_typography.dart';
 class PrimaryButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
+  final String? icon;
   final bool isLoading;
 
   const PrimaryButton({
     super.key,
     required this.text,
+    this.icon,
     required this.onPressed,
     this.isLoading = false,
   });
@@ -35,9 +37,17 @@ class PrimaryButton extends StatelessWidget {
                   strokeWidth: 2,
                 ),
               )
-            : Text(
-                text,
-                style: AppTypography.label.copyWith(color: AppColors.white),
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(icon!, color: AppColors.white),
+                  const SizedBox(width: 8),
+                  Text(
+                    text,
+                    style: AppTypography.label.copyWith(color: AppColors.white),
+                  ),
+                ],
               ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:compfest/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -57,7 +58,6 @@ class DeadStockCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Row 1: SKU & Badge
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -65,7 +65,7 @@ class DeadStockCard extends StatelessWidget {
                   sku,
                   style: AppTypography.label.copyWith(
                     fontSize: 12,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 // Priority Badge
@@ -148,34 +148,12 @@ class DeadStockCard extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            SizedBox(
-              width: double.infinity,
-              height: containerHeight * 0.18,
-              child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  elevation: 0,
-                ),
-                onPressed: () {
-                  // TODO: Navigasi ke halaman AI Diagnosis
-                },
-                icon: Image.asset(
-                  'assets/icons/diagnose_icon.png',
-                  width: 20,
-                  height: 20,
-                ),
-                label: Text(
-                  'Diagnose',
-                  style: AppTypography.label.copyWith(
-                    color: AppColors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+            PrimaryButton(
+              text: 'Diagnose',
+              icon: 'assets/icons/diagnose_icon.png',
+              onPressed: () {
+                Navigator.pushNamed(context, '/dead-stock-detail');
+              },
             ),
           ],
         ),

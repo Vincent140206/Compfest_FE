@@ -1,6 +1,7 @@
 import 'package:compfest/core/theme/app_theme.dart';
-import 'package:compfest/features/dashboard/presentation/dashboard_page.dart';
-import 'package:compfest/features/dashboard/presentation/dead_stock_detail_page.dart';
+import 'package:compfest/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:compfest/features/dashboard/presentation/widgets/dashboard_empty_view.dart';
+import 'package:compfest/features/pages/dead_stock_detail_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const DashboardPage(),
+      home: const DashboardEmptyView(),
       routes: {
         '/dashboard': (context) => const DashboardPage(),
         '/dead-stock-detail': (context) => const DeadStockDetailPage(),

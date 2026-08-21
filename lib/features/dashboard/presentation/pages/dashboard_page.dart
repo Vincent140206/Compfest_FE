@@ -2,7 +2,7 @@ import 'package:compfest/core/theme/app_colors.dart';
 import 'package:compfest/features/dashboard/presentation/widgets/capital_locked_banner.dart';
 import 'package:compfest/features/dashboard/presentation/widgets/dead_stock_card.dart';
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_typography.dart';
+import '../../../../../core/theme/app_typography.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});

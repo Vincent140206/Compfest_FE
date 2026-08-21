@@ -1,3 +1,4 @@
+import 'package:compfest/core/theme/app_colors.dart';
 import 'package:compfest/features/dashboard/presentation/widgets/capital_locked_banner.dart';
 import 'package:compfest/features/dashboard/presentation/widgets/dead_stock_card.dart';
 import 'package:flutter/material.dart';
@@ -9,16 +10,22 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: const Text(
-          'Flozy',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Row(
+          children: [
+            Image.network(
+              'https://images.unsplash.com/photo-1564564244660-5d73c057f2d2?q=80&w=1476&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+              width: 32,
+              height: 32,
+              fit: BoxFit.cover,
+            ),
+            SizedBox(width: 8),
+            Text('Flozy', style: TextStyle(fontWeight: FontWeight.bold)),
+          ],
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_none),
-            onPressed: () {},
-          ),
+          IconButton(icon: const Icon(Icons.notifications), onPressed: () {}),
         ],
       ),
       body: SingleChildScrollView(

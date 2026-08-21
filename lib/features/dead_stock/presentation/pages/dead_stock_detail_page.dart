@@ -2,6 +2,7 @@
 
 import 'package:compfest/core/theme/app_colors.dart';
 import 'package:compfest/core/theme/app_typography.dart';
+import 'package:compfest/features/dead_stock/presentation/pages/widgets/opportunity_cost_card.dart';
 import 'package:compfest/features/dead_stock/presentation/pages/widgets/product_image_header.dart';
 import 'package:compfest/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
@@ -103,6 +104,9 @@ class _DeadStockDetailPageState extends State<DeadStockDetailPage> {
               ),
               SizedBox(height: screenHeight * 0.02),
               ProductImageHeader(),
+              SizedBox(height: screenHeight * 0.02),
+              OpportunityCostCard(),
+              SizedBox(height: screenHeight * 1),
             ],
           ),
         ),

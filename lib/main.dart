@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
       home: const DashboardEmptyView(),
       routes: {
         '/dashboard': (context) => const DashboardPage(),
+        '/dashboard-empty': (context) => const DashboardEmptyView(),
         '/dead-stock-detail': (context) => const DeadStockDetailPage(),
       },
     );

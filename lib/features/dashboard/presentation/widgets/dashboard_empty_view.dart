@@ -81,7 +81,9 @@ class _DashboardEmptyViewState extends State<DashboardEmptyView> {
                 text: 'Upload CSV Data',
                 icon: 'assets/icons/upload.png',
                 isLoading: false,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/dashboard');
+                },
               ),
               SizedBox(height: screenHeight * 0.03),
               Text(

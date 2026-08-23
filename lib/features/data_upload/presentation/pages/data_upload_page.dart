@@ -10,7 +10,6 @@ class UploadDataPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // 1. AppBar
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -18,7 +17,7 @@ class UploadDataPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.menu, color: AppColors.primary),
           onPressed: () {
-            // TODO: Buka drawer atau back
+            Navigator.pushNamed(context, '/forecast');
           },
         ),
         title: Text(

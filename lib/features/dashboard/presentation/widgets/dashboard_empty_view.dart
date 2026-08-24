@@ -38,7 +38,7 @@ class _DashboardEmptyViewState extends State<DashboardEmptyView> {
               ),
               child: const Icon(Icons.person_2_outlined, color: Colors.black),
             ),
-            const Text('Flozy', style: TextStyle(fontWeight: FontWeight.bold)),
+            const Text('Invise', style: TextStyle(fontWeight: FontWeight.bold)),
             Icon(Icons.notifications_none, color: Colors.black),
           ],
         ),
@@ -72,7 +72,7 @@ class _DashboardEmptyViewState extends State<DashboardEmptyView> {
               ),
               SizedBox(height: screenHeight * 0.005),
               Text(
-                "Flozy's AI engine is waiting to analyze your inventory. Upload your data to detect dead stock and unlock your cash flow immediately.",
+                "Invise's AI engine is waiting to analyze your inventory. Upload your data to detect dead stock and unlock your cash flow immediately.",
                 style: AppTypography.body.copyWith(fontSize: 16),
                 textAlign: TextAlign.center,
               ),

@@ -27,7 +27,7 @@ class _DeadStockDetailPageState extends State<DeadStockDetailPage> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          'Flozy',
+          'Invise',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),

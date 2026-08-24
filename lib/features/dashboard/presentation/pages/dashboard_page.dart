@@ -21,7 +21,7 @@ class DashboardPage extends StatelessWidget {
               fit: BoxFit.cover,
             ),
             SizedBox(width: 8),
-            Text('Flozy', style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('Invise', style: TextStyle(fontWeight: FontWeight.bold)),
           ],
         ),
         actions: [

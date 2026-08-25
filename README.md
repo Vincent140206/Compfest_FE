@@ -36,7 +36,7 @@ Follow these steps to get your development environment running:
 1. **Clone the repository**
    Open your terminal and run the following command:
    ```bash
-   git clone https://github.com/Vincent140206/Compfest_FE
+   git clone https://github.com/INVISE-COMPFEST/invise-fe
    cd compfest
    ```
 

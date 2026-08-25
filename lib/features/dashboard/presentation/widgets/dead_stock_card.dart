@@ -1,5 +1,6 @@
 import 'package:compfest/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 
@@ -9,6 +10,7 @@ class DeadStockCard extends StatelessWidget {
   final String quantity;
   final String valueLocked;
   final String priorityLevel;
+  final String itemsId;
 
   const DeadStockCard({
     super.key,
@@ -17,6 +19,7 @@ class DeadStockCard extends StatelessWidget {
     required this.quantity,
     required this.valueLocked,
     required this.priorityLevel,
+    required this.itemsId,
   });
 
   @override
@@ -24,13 +27,23 @@ class DeadStockCard extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    final isHighPriority = priorityLevel == 'High';
-    final priorityColor = isHighPriority
-        ? AppColors.secondary
-        : AppColors.tertiary;
-    final priorityIcon = isHighPriority
-        ? Icons.trending_down
-        : Icons.warning_rounded;
+    Color priorityColor;
+    IconData priorityIcon;
+    final status = priorityLevel.toLowerCase().trim();
+
+    if (status.contains('healthy')) {
+      priorityColor = Colors.green;
+      priorityIcon = Icons.favorite;
+    } else if (status.contains('slow')) {
+      priorityColor = Colors.amber.shade700;
+      priorityIcon = Icons.warning_rounded;
+    } else if (status.contains('dead')) {
+      priorityColor = Colors.red;
+      priorityIcon = Icons.trending_down;
+    } else {
+      priorityColor = AppColors.tertiary;
+      priorityIcon = Icons.info_outline;
+    }
 
     final containerWidth = screenWidth * 0.9;
     final containerHeight = screenHeight * 0.25;
@@ -153,7 +166,10 @@ class DeadStockCard extends StatelessWidget {
               text: 'Diagnose',
               icon: 'assets/icons/diagnose_icon.png',
               onPressed: () {
-                Navigator.pushNamed(context, '/dead-stock-detail');
+                Get.toNamed('/dead-stock-detail', arguments: {
+                  'itemsId': itemsId,
+                  'status': priorityLevel,
+                });
               },
             ),
           ],

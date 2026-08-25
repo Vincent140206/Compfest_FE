@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 
 class CapitalLockedBanner extends StatelessWidget {
-  const CapitalLockedBanner({super.key});
+  final double totalAmount;
+
+  const CapitalLockedBanner({
+    super.key,
+    required this.totalAmount,
+  });
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final currencyFormat = NumberFormat.currency(
+      locale: 'en_US',
+      symbol: '\$',
+      decimalDigits: 2,
+    );
 
     return Container(
       width: screenWidth * 0.9,
@@ -20,6 +31,7 @@ class CapitalLockedBanner extends StatelessWidget {
         border: Border.all(color: AppColors.secondary.withOpacity(0.5)),
       ),
       child: Stack(
+        alignment: Alignment.centerLeft,
         children: [
           Row(
             children: [
@@ -33,6 +45,7 @@ class CapitalLockedBanner extends StatelessWidget {
             ],
           ),
           Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
@@ -51,19 +64,10 @@ class CapitalLockedBanner extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Rp 42.500.000',
+                currencyFormat.format(totalAmount),
                 style: AppTypography.headline.copyWith(
                   color: AppColors.secondary,
                   fontSize: screenWidth * 0.07,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Equivalent to 14 Days of Operating Costs\n(Rent/Salary)',
-                style: AppTypography.label.copyWith(
-                  // ignore: deprecated_member_use
-                  color: AppColors.secondary.withOpacity(0.8),
-                  fontSize: 12,
                 ),
               ),
             ],

@@ -1,7 +1,13 @@
 import 'package:compfest/core/theme/app_colors.dart';
+import 'package:compfest/features/dashboard/presentation/widgets/dashboard_empty_view.dart';
 import 'package:compfest/features/dashboard/presentation/widgets/capital_locked_banner.dart';
 import 'package:compfest/features/dashboard/presentation/widgets/dead_stock_card.dart';
+import 'package:compfest/features/dashboard/presentation/controllers/dashboard_controller.dart';
+import 'package:compfest/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart' as import_shared_prefs;
+import 'package:intl/intl.dart';
 import '../../../../../core/theme/app_typography.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -9,68 +15,165 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(DashboardController());
+
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Row(
           children: [
-            Image.network(
-              'https://images.unsplash.com/photo-1564564244660-5d73c057f2d2?q=80&w=1476&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-              width: 32,
-              height: 32,
-              fit: BoxFit.cover,
-            ),
-            SizedBox(width: 8),
-            Text('Invise', style: TextStyle(fontWeight: FontWeight.bold)),
+            Image.asset('assets/images/inviseLogoName.png', height: 28),
           ],
         ),
         actions: [
           IconButton(icon: const Icon(Icons.notifications), onPressed: () {}),
+          IconButton(icon: const Icon(Icons.logout), onPressed: () async {
+            final prefs = await import_shared_prefs.SharedPreferences.getInstance();
+            await prefs.remove('token');
+            Get.offAllNamed('/login');
+          }),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 16),
-              const CapitalLockedBanner(),
-              const SizedBox(height: 24),
+      body: Obx(() {
+        if (!controller.isDataUploaded.value && !controller.isLoadingBatches.value) {
+          return const DashboardEmptyView();
+        }
+        
+        return SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                const SizedBox(height: 16),
+                CapitalLockedBanner(totalAmount: controller.totalCapitalLocked),
+                const SizedBox(height: 24),
 
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.9,
-                child: Text(
-                  'Dead Stock Alerts',
-                  style: AppTypography.headline.copyWith(fontSize: 20),
-                  textAlign: TextAlign.left,
+              const SizedBox(height: 16),
+              
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Dead Stock Alerts',
+                      style: AppTypography.headline.copyWith(fontSize: 20),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Obx(() => Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: controller.selectedStatusFilter.value,
+                            isDense: true,
+                            isExpanded: true,
+                            icon: const Icon(Icons.filter_list, size: 18),
+                            items: ['All', 'Healthy', 'Slow-moving', 'Dead stock'].map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value, style: AppTypography.label.copyWith(fontSize: 13)),
+                              );
+                            }).toList(),
+                            onChanged: (newValue) {
+                              if (newValue != null) controller.selectedStatusFilter.value = newValue;
+                            },
+                          ),
+                        ),
+                      )),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Obx(() => Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: controller.selectedSort.value,
+                            isDense: true,
+                            isExpanded: true,
+                            icon: const Icon(Icons.sort, size: 18),
+                            items: ['Default', 'Value (High to Low)', 'Value (Low to High)'].map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value, style: AppTypography.label.copyWith(fontSize: 13)),
+                              );
+                            }).toList(),
+                            onChanged: (newValue) {
+                              if (newValue != null) controller.selectedSort.value = newValue;
+                            },
+                          ),
+                        ),
+                      )),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 16),
-
-              const DeadStockCard(
-                sku: 'SKU-A012',
-                productName: 'Premium Widget Pack',
-                quantity: '450 Units',
-                valueLocked: 'Rp 12.500.000',
-                priorityLevel: 'High',
-              ),
-              const DeadStockCard(
-                sku: 'SKU-B334',
-                productName: 'Standard Casing V2',
-                quantity: '820 Units',
-                valueLocked: 'Rp 18.200.000',
-                priorityLevel: 'High',
-              ),
-              const DeadStockCard(
-                sku: 'SKU-C001',
-                productName: 'Legacy Connectors',
-                quantity: '1,200 Units',
-                valueLocked: 'Rp 11.800.000',
-                priorityLevel: 'Medium',
-              ),
+              
+              Obx(() {
+                if (controller.isLoadingItems.value) {
+                  return const Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                
+                final filteredItems = controller.filteredAndSortedItems;
+                
+                if (filteredItems.isEmpty) {
+                  return const Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: Text('No items match the current filter.'),
+                  );
+                }
+                
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: filteredItems.length,
+                  itemBuilder: (context, index) {
+                    final item = filteredItems[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+                      child: DeadStockCard(
+                        sku: item['sku']?.toString() ?? 'N/A',
+                        productName: item['name']?.toString() ?? 'Unknown',
+                        quantity: '${item['quantity'] ?? 0} Units',
+                        valueLocked: NumberFormat.currency(
+                          locale: 'en_US',
+                          symbol: '\$',
+                          decimalDigits: 2,
+                        ).format(double.tryParse(item['value_locked']?.toString() ?? '0') ?? 0.0),
+                        priorityLevel: item['deadstock_status']?.toString() ?? 'Unknown',
+                        itemsId: item['items_id']?.toString() ?? '',
+                      ),
+                    );
+                  },
+                );
+              }),
             ],
           ),
         ),
-      ),
+      );
+    }),
     );
   }
 }
+

@@ -6,6 +6,7 @@ import 'package:compfest/features/dashboard/presentation/widgets/step_instructio
 import 'package:compfest/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart' as import_shared_prefs;
 
 class DashboardEmptyView extends StatefulWidget {
   const DashboardEmptyView({super.key});
@@ -40,7 +41,19 @@ class _DashboardEmptyViewState extends State<DashboardEmptyView> {
               child: const Icon(Icons.person_2_outlined, color: Colors.black),
             ),
             Image.asset('assets/images/Invise.png', height: 32),
-            const Icon(Icons.notifications_none, color: Colors.black),
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.logout, color: Colors.black),
+                  onPressed: () async {
+                    final prefs = await import_shared_prefs.SharedPreferences.getInstance();
+                    await prefs.remove('token');
+                    Get.offAllNamed('/login');
+                  },
+                ),
+                const Icon(Icons.notifications_none, color: Colors.black),
+              ],
+            ),
           ],
         ),
       ),

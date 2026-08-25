@@ -27,7 +27,10 @@ class ForecastPage extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            Text('Flozy', style: AppTypography.headline.copyWith(fontSize: 20)),
+            Text(
+              'Invise',
+              style: AppTypography.headline.copyWith(fontSize: 20),
+            ),
           ],
         ),
         actions: [

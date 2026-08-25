@@ -5,6 +5,7 @@ import 'package:compfest/core/theme/app_typography.dart';
 import 'package:compfest/features/dashboard/presentation/widgets/step_instruction_card.dart';
 import 'package:compfest/shared/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class DashboardEmptyView extends StatefulWidget {
   const DashboardEmptyView({super.key});
@@ -38,8 +39,8 @@ class _DashboardEmptyViewState extends State<DashboardEmptyView> {
               ),
               child: const Icon(Icons.person_2_outlined, color: Colors.black),
             ),
-            const Text('Invise', style: TextStyle(fontWeight: FontWeight.bold)),
-            Icon(Icons.notifications_none, color: Colors.black),
+            Image.asset('assets/images/Invise.png', height: 32),
+            const Icon(Icons.notifications_none, color: Colors.black),
           ],
         ),
       ),
@@ -82,7 +83,7 @@ class _DashboardEmptyViewState extends State<DashboardEmptyView> {
                 icon: 'assets/icons/upload.png',
                 isLoading: false,
                 onPressed: () {
-                  Navigator.pushNamed(context, '/upload');
+                  Get.toNamed('/upload');
                 },
               ),
               SizedBox(height: screenHeight * 0.03),

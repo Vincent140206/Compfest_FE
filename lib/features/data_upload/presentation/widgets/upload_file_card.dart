@@ -6,6 +6,7 @@ class UploadFileCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
+  final String? selectedFileName;
   final VoidCallback onSelectFile;
 
   const UploadFileCard({
@@ -13,6 +14,7 @@ class UploadFileCard extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.subtitle,
+    this.selectedFileName,
     required this.onSelectFile,
   });
 
@@ -22,9 +24,11 @@ class UploadFileCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: selectedFileName != null ? AppColors.primary.withOpacity(0.05) : Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade300),
+        border: Border.all(
+          color: selectedFileName != null ? AppColors.primary : Colors.grey.shade300,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,15 +56,20 @@ class UploadFileCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      subtitle,
+                      selectedFileName ?? subtitle,
                       style: AppTypography.label.copyWith(
                         fontSize: 12,
-                        color: Colors.grey.shade600,
+                        color: selectedFileName != null ? AppColors.primary : Colors.grey.shade600,
+                        fontWeight: selectedFileName != null ? FontWeight.bold : FontWeight.normal,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
               ),
+              if (selectedFileName != null)
+                const Icon(Icons.check_circle, color: AppColors.primary),
             ],
           ),
           const SizedBox(height: 16),
@@ -69,17 +78,19 @@ class UploadFileCard extends StatelessWidget {
             height: 40,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
+                backgroundColor: selectedFileName != null ? Colors.white : AppColors.primary,
+                foregroundColor: selectedFileName != null ? AppColors.primary : Colors.white,
+                side: selectedFileName != null ? const BorderSide(color: AppColors.primary) : null,
+                elevation: 0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
               onPressed: onSelectFile,
               child: Text(
-                'Select File',
+                selectedFileName != null ? 'Change File' : 'Select File',
                 style: AppTypography.label.copyWith(
-                  color: Colors.white,
+                  color: selectedFileName != null ? AppColors.primary : Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),

@@ -1,10 +1,15 @@
 import 'package:compfest/core/theme/app_colors.dart';
 import 'package:compfest/core/theme/app_typography.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../widgets/upload_file_card.dart';
+import 'package:compfest/features/data_upload/presentation/controllers/data_upload_controller.dart';
+import 'package:compfest/shared/widgets/buttons/primary_button.dart';
 
 class UploadDataPage extends StatelessWidget {
-  const UploadDataPage({super.key});
+  UploadDataPage({super.key});
+
+  final DataUploadController _uploadController = Get.put(DataUploadController());
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +22,7 @@ class UploadDataPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.menu, color: AppColors.primary),
           onPressed: () {
-            Navigator.pushNamed(context, '/forecast');
+            Get.back();
           },
         ),
         title: Text(
@@ -42,7 +47,7 @@ class UploadDataPage extends StatelessWidget {
         ],
       ),
 
-      body: SingleChildScrollView(
+      body: Obx(() => SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,29 +75,24 @@ class UploadDataPage extends StatelessWidget {
               icon: Icons.trending_up_rounded,
               title: 'Monthly Sales Data (.csv)',
               subtitle: 'Used for AI demand training',
-              onSelectFile: () {
-                Navigator.pushNamed(context, '/dashboard');
-              },
+              selectedFileName: _uploadController.monthlySalesFile.value?.name,
+              onSelectFile: () => _uploadController.pickFile('monthly_sales'),
             ),
 
-            // Card 2: Unit Cost Data
             UploadFileCard(
               icon: Icons.payments_outlined,
               title: 'Unit Cost Data (.csv)',
               subtitle: 'Purchase price per item',
-              onSelectFile: () {
-                // TODO: Panggil fungsi file picker
-              },
+              selectedFileName: _uploadController.unitCostFile.value?.name,
+              onSelectFile: () => _uploadController.pickFile('unit_cost'),
             ),
 
-            // Card 3: Stock Level Data
             UploadFileCard(
               icon: Icons.inventory_2_outlined,
               title: 'Stock Level Data (.csv)',
               subtitle: 'Current inventory counts',
-              onSelectFile: () {
-                // TODO: Panggil fungsi file picker
-              },
+              selectedFileName: _uploadController.stockLevelFile.value?.name,
+              onSelectFile: () => _uploadController.pickFile('stock_level'),
             ),
 
             const SizedBox(height: 24),
@@ -108,10 +108,19 @@ class UploadDataPage extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 80),
+            const SizedBox(height: 48),
+
+            if (_uploadController.canUpload)
+              PrimaryButton(
+                text: 'Upload Files',
+                isLoading: _uploadController.isLoading.value,
+                onPressed: _uploadController.uploadFiles,
+              ),
+
+            const SizedBox(height: 48),
           ],
         ),
-      ),
+      )),
     );
   }
 }

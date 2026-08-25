@@ -1,7 +1,9 @@
 import 'package:compfest/features/forecast/presentation/widgets/early_warning_banner.dart';
 import 'package:compfest/features/forecast/presentation/widgets/market_context_card.dart';
 import 'package:compfest/features/forecast/presentation/widgets/sku_project_card.dart';
+import 'package:compfest/features/forecast/presentation/controllers/forecast_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:compfest/core/theme/app_colors.dart';
 import 'package:compfest/core/theme/app_typography.dart';
 
@@ -10,6 +12,8 @@ class ForecastPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(ForecastController());
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -18,19 +22,7 @@ class ForecastPage extends StatelessWidget {
         scrolledUnderElevation: 0,
         title: Row(
           children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Text(
-              'Invise',
-              style: AppTypography.headline.copyWith(fontSize: 20),
-            ),
+            Image.asset('assets/images/inviseLogoName.png', height: 28),
           ],
         ),
         actions: [
@@ -79,68 +71,88 @@ class ForecastPage extends StatelessWidget {
                     letterSpacing: 1.0,
                   ),
                 ),
-                Row(
-                  children: [
-                    _buildToggleBtn('7\nDay', true),
-                    _buildToggleBtn('14\nDay', false),
-                    _buildToggleBtn('30\nDay', false),
-                  ],
-                ),
+                Obx(() => Container(
+                      height: 36,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.grey.shade300),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: controller.selectedFilter.value,
+                          icon: const Icon(Icons.filter_list, size: 16, color: AppColors.neutral),
+                          style: AppTypography.label.copyWith(color: AppColors.neutral),
+                          items: <String>['All', 'RESTOCK', 'HOLD', 'DISCOUNT']
+                              .map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (newValue) {
+                            if (newValue != null) {
+                              controller.selectedFilter.value = newValue;
+                            }
+                          },
+                        ),
+                      ),
+                    )),
               ],
             ),
             const SizedBox(height: 16),
 
-            SkuProjectionCard(
-              sku: 'SKU-8924',
-              name: 'Oversized Navy Hoodie',
-              trendColor: Colors.green,
-              trendText: '+24% Proj. Demand',
-              badgeText: 'Safe to Restock',
-              badgeColor: AppColors.primary,
-              chartData: const [0.0, 1.0, 1.5, 2.0, 1.8, 2.5],
-            ),
-            SkuProjectionCard(
-              sku: 'SKU-1105',
-              name: 'Slim Fit Charcoal Tee',
-              trendColor: AppColors.secondary,
-              trendText: '-32% Proj. Demand',
-              badgeText: 'Hold',
-              badgeColor: Colors.grey.shade200,
-              badgeTextColor: Colors.black87,
-              chartData: const [2.5, 2.0, 1.5, 1.0, 0.5, 0.0],
-            ),
-            SkuProjectionCard(
-              sku: 'SKU-4432',
-              name: 'Standard Beige Cargo',
-              trendColor: Colors.black,
-              trendText: 'Stable Demand',
-              badgeText: 'Safe to Restock',
-              badgeColor: AppColors.primary,
-              chartData: const [1.0, 1.1, 1.0, 0.9, 1.0, 1.1],
-            ),
+            Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (controller.filteredProjections.isEmpty) {
+                return const Center(child: Text('No projections available for this filter.'));
+              }
+              return Column(
+                children: controller.filteredProjections.map<Widget>((item) {
+                  final double percentage = double.tryParse(item['projection_percentage']?.toString() ?? '0') ?? 0.0;
+                  final String decision = item['decision']?.toString() ?? 'UNKNOWN';
+                  final List<dynamic> points = item['projection_points'] ?? [];
+                  
+                  List<double> chartData = [];
+                  for (var point in points) {
+                    if (point is List && point.length >= 2) {
+                      chartData.add(double.tryParse(point[1]?.toString() ?? '0') ?? 0.0);
+                    }
+                  }
+                  if (chartData.isEmpty) chartData = [0.0];
+
+                  Color trendColor = percentage >= 0 ? Colors.green : AppColors.secondary;
+                  String trendText = '${percentage > 0 ? '+' : ''}${percentage.toStringAsFixed(2)}% Proj. Demand';
+                  
+                  Color badgeColor = AppColors.primary;
+                  Color badgeTextColor = Colors.white;
+                  if (decision.toUpperCase() == 'HOLD') {
+                    badgeColor = Colors.grey.shade200;
+                    badgeTextColor = Colors.black87;
+                    trendColor = AppColors.secondary;
+                  } else if (decision.toUpperCase() == 'DISCOUNT') {
+                    badgeColor = AppColors.secondary;
+                  }
+
+                  return SkuProjectionCard(
+                    sku: item['sku']?.toString() ?? 'N/A',
+                    name: item['name']?.toString() ?? 'Unknown',
+                    trendColor: trendColor,
+                    trendText: trendText,
+                    badgeText: decision,
+                    badgeColor: badgeColor,
+                    badgeTextColor: badgeTextColor,
+                    chartData: chartData,
+                  );
+                }).toList(),
+              );
+            }),
 
             const SizedBox(height: 80),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildToggleBtn(String text, bool isActive) {
-    return Container(
-      margin: const EdgeInsets.only(left: 4),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: isActive ? AppColors.primary : AppColors.background,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: AppTypography.label.copyWith(
-          fontSize: 10,
-          color: isActive ? Colors.white : AppColors.primary,
-          fontWeight: FontWeight.bold,
         ),
       ),
     );

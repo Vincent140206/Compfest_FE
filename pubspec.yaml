@@ -41,6 +41,7 @@ dependencies:
   get: ^4.7.3
   shared_preferences: ^2.5.5
   file_picker: ^12.0.0
+  intl: ^0.20.3
 
 dev_dependencies:
   flutter_test:

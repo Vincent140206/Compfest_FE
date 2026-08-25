@@ -1,9 +1,15 @@
 import 'package:compfest/core/theme/app_colors.dart';
 import 'package:compfest/core/theme/app_typography.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class OpportunityCostCard extends StatelessWidget {
-  const OpportunityCostCard({super.key});
+  final double opportunityCost;
+  
+  const OpportunityCostCard({
+    super.key,
+    required this.opportunityCost,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +57,13 @@ class OpportunityCostCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
 
-                Text.rich(
+                  Text.rich(
                   TextSpan(
                     text: 'This item is eating ',
                     style: AppTypography.body.copyWith(fontSize: 14),
                     children: [
                       TextSpan(
-                        text: 'Rp 150.000 / month',
+                        text: '${NumberFormat.currency(locale: 'en_US', symbol: '\$', decimalDigits: 2).format(opportunityCost)} / month',
                         style: AppTypography.body.copyWith(
                           fontSize: 18,
                           color: AppColors.secondary,

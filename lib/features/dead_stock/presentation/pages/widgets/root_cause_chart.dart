@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart'; // Import library-nya
 
 class RootCauseChart extends StatelessWidget {
-  const RootCauseChart({super.key});
+  final List<dynamic> reasons;
+
+  const RootCauseChart({super.key, required this.reasons});
 
   @override
   Widget build(BuildContext context) {
@@ -30,31 +32,32 @@ class RootCauseChart extends StatelessWidget {
           const SizedBox(height: 12),
           Divider(color: Colors.grey.shade300),
           const SizedBox(height: 16),
-
-          _buildCauseItem(
-            icon: Icons.money_off_csred_outlined,
-            title: 'Overpriced',
-            percent: 0.75,
-            color: AppColors.secondary,
-            isAlert: true,
-          ),
-          const SizedBox(height: 20),
-
-          // 2. Item Declining Trend (Abu-abu)
-          _buildCauseItem(
-            icon: Icons.trending_down,
-            title: 'Declining Trend',
-            percent: 0.20,
-            color: AppColors.neutral,
-          ),
-          const SizedBox(height: 20),
-
-          _buildCauseItem(
-            icon: Icons.campaign_outlined,
-            title: 'Marketing Reach',
-            percent: 0.05,
-            color: AppColors.neutral,
-          ),
+          
+          if (reasons.isEmpty)
+            const Text('No reasons found.')
+          else
+            ...reasons.map((reason) {
+              final name = reason['name'] ?? 'Unknown';
+              final percentageVal = reason['percentage'];
+              double percentage = 0.0;
+              if (percentageVal is num) {
+                percentage = percentageVal.toDouble() / 100.0;
+              } else if (percentageVal is String) {
+                percentage = (double.tryParse(percentageVal) ?? 0.0) / 100.0;
+              }
+              final isTopReason = reasons.indexOf(reason) == 0;
+              
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 20.0),
+                child: _buildCauseItem(
+                  icon: isTopReason ? Icons.money_off_csred_outlined : Icons.trending_down,
+                  title: name,
+                  percent: percentage,
+                  color: isTopReason ? AppColors.secondary : AppColors.neutral,
+                  isAlert: isTopReason,
+                ),
+              );
+            }),
         ],
       ),
     );

@@ -4,6 +4,7 @@ import 'package:compfest/features/dashboard/presentation/pages/dashboard_page.da
 import 'package:compfest/features/dashboard/presentation/widgets/dashboard_empty_view.dart';
 import 'package:compfest/features/forecast/presentation/pages/forecast_page.dart';
 import 'package:compfest/features/main_navigation/presentation/controllers/main_navigation_controller.dart';
+import 'package:compfest/shared/widgets/empty_404_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,15 +20,29 @@ class MainNavigationPage extends StatelessWidget {
       body: Obx(() {
         switch (_navController.selectedIndex.value) {
           case 0:
+            if (_dashboardController.isLoadingBatches.value) {
+              return const Center(child: CircularProgressIndicator());
+            }
             return _dashboardController.isDataUploaded.value
                 ? const DashboardPage()
                 : const DashboardEmptyView();
           case 1:
-            return const ForecastPage();
+            return _dashboardController.isDataUploaded.value
+                ? const ForecastPage()
+                : const Empty404View(
+                    title: 'Empty',
+                    message: 'Upload your stock data in dashboard\nto view forecast.',
+                  );
           case 2:
-            return const Center(child: Text('Command Page'));
+            return const Empty404View(
+              title: 'Command',
+              message: 'This feature is currently\nunder development!',
+            );
           case 3:
-            return const Center(child: Text('Inventory Page'));
+            return const Empty404View(
+              title: 'Inventory',
+              message: 'This feature is currently\nunder development!',
+            );
           default:
             return const DashboardEmptyView();
         }

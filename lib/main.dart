@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/register', page: () => RegisterPage()),
         GetPage(name: '/verify', page: () => VerifyOtpPage()),
         GetPage(name: '/main', page: () => MainNavigationPage()),
-        GetPage(name: '/upload', page: () => const UploadDataPage()),
+        GetPage(name: '/upload', page: () => UploadDataPage()),
         GetPage(name: '/dashboard', page: () => const DashboardPage()),
         GetPage(name: '/dashboard-empty', page: () => const DashboardEmptyView()),
         GetPage(name: '/dead-stock-detail', page: () => const DeadStockDetailPage()),

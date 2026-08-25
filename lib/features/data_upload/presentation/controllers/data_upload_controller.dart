@@ -18,13 +18,12 @@ class DataUploadController extends GetxController {
       stockLevelFile.value != null;
 
   Future<void> pickFile(String type) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    PlatformFile? file = await FilePicker.pickFile(
       type: FileType.custom,
       allowedExtensions: ['csv'],
     );
 
-    if (result != null) {
-      PlatformFile file = result.files.first;
+    if (file != null) {
       if (type == 'monthly_sales') {
         monthlySalesFile.value = file;
       } else if (type == 'unit_cost') {

@@ -41,8 +41,10 @@ class PrimaryButton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(icon!, color: AppColors.white),
-                  const SizedBox(width: 8),
+                  if (icon != null) ...[
+                    Image.asset(icon!, color: AppColors.white),
+                    const SizedBox(width: 8),
+                  ],
                   Text(
                     text,
                     style: AppTypography.label.copyWith(color: AppColors.white),

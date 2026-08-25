@@ -29,6 +29,10 @@ class VerifyOtpPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 16),
+              Center(
+                child: Image.asset('assets/images/Invise.png', height: 48),
+              ),
+              const SizedBox(height: 24),
               Text(
                 'Verify Email',
                 style: AppTypography.headline.copyWith(fontSize: 24, fontWeight: FontWeight.bold),

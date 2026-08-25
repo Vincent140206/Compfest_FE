@@ -74,3 +74,15 @@ lib/
 └── main.dart               # Application entry point
 ```
 
+## Seeder Account
+
+For testing and development purposes, you can use the following seeded account:
+
+| Field    | Value                                   |
+| -------- | --------------------------------------- |
+| Email    | `vincentiusdylanwangsawijaya@gmail.com` |
+| Password | `12345678`                              |
+
+Alternatively, you can create your own account by registering through the application.
+
+
